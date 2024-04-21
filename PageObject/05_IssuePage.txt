@@ -1,0 +1,57 @@
+
+#******************** Settings ************************
+
+*** Settings ***
+
+Documentation	Issue Test scenario. CRUD Operation: Create, Read, Update, Delete
+
+Pre Condition	Open Browser, Project Must Be Created By User Beforehand 
+Post Condition	Close All Browsers
+Tags	Issue, TS-5-Issue
+
+#******************* Common Variables ********************
+
+*** Variables ***
+
+IssueUrl = https://gitlab.com/group8575216/projectname/-/issues
+IssueName= Issue
+NewIssueName= Issue_New
+Project_URL= Group
+TemplateName= TempName
+Empty=
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+# Positive Tests
+
+Create Issue
+	Navigate To Issue Page	IssueUrl
+	Click New Issue
+	Input Issue Title	IssueName
+	Click Create Issue
+	Verify Page Should Contain Message Issue created just now by {{ User's name }}
+
+Update Issue Name
+	Navigate To Issue Page	IssueUrl
+	Click Previously Created Issue
+	Click Edit
+	Edit The Issue Name
+	Click Save Changes
+	Verify Page Should Contain Message {{ User's name }} changed title from {{ Old Issue Name }} to {{ New Issue Name }} just now
+
+Create An Issue With The Previously Updated Name
+	Navigate To Issue Page	IssueUrl
+	Click New Issue
+	Input Issue Title	NewIssueName
+	Click Create Issue
+	Verify Page Should Contain Message Issue created just now by {{ User's name }}
+
+Delete Issue
+	Navigate To Issue Page	IssueUrl
+	Click Issue That Needs To Be deleted
+	Click Three Dots To Open Dropdown
+	Click Delete Issue
+	Click Delete Issue
+	Verify Page Should Contain Message The issue was successfully deleted

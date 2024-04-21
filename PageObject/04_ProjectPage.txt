@@ -1,0 +1,88 @@
+
+#******************** Settings ************************
+
+*** Settings ***
+
+Documentation	Testing project scenarios. CRUD Operation: Create, Read, Update, Delete
+
+Pre Condition	 Open Browser, Valid Login Credentials Must Be Created Beforehand
+Post Condition	Close All Browsers
+Tags	Project, TS-4-Project
+
+#******************* Common Variables ********************
+
+*** Variables ***
+
+ProjectUrl = https://gitlab.com/projects/new
+ProjectName= ProjectName
+Project_URL= Group
+TemplateName= TempName
+Empty=
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+# Positive Tests
+
+Create Blank Project
+	Navigate To Project Page	ProjectUrl
+	Click Create Blank Project
+	Input Project Name	ProjectName
+	Input Project URL	ProjectUrl
+	Input Project Slug	ProjectSlug
+	Choose Private Visibility Level
+	Choose Initialize repository with a README
+	Click Create Project
+	Verify Page Should Contain Message Project {{ Project Name }} was successfully created
+
+Create Template Project
+	Navigate To Project Page	ProjectUrl
+	Click Create From Template
+	Click Use template For Ruby On Rails
+	Input Project Name	TemplateName
+	Choose Private Visibility Level
+	Click Create Project
+	Verify Page Should Contain Message The project {{ Template Name }} was successfully imported
+
+Update Template Project Name
+	Navigate To Project Page	ProjectUrl
+	Click Projects From The Side Bar
+	Click The Template Project
+	Click Three Dots To Open Dropdown
+	Click Project Settings
+	Edit Template Project Name
+	Click Save Changes
+	Verify Page Should Contain Message Project {{ Template Name }} was successfully updated
+
+Delete Template Project
+	Navigate To Project Page	ProjectUrl
+	Click Projects From The Side Menu
+	Click Template Project
+	Click Three Dots To Open Dropdown
+	Click Project Settings
+	Click Expand Advanced Settings
+	Click Delete Project
+	Input The Path Name For The Project
+	Click Yes, Delete Project
+	Verify Page Should Contain Message Project {{ Template Name }} will be deleted on {{ Date }}
+
+Validate That Message Is Showing Project 'First project' was successfully created
+	Navigate To Project Page	ProjectUrl
+	Click Create Blank Project
+	Input First project As Project Name
+	Click Create Project
+	Verify Page Should Contain Message Project 'First project' was successfully created
+
+# Negative Tests
+
+Create A Blank Project With The Previous Same Name
+	Navigate To Project Page	ProjectUrl
+	Click Create Blank Project
+	Input Project Name	ProjectName
+	Click Create Project
+	Verify Page Should Contain Message
+		The form contains the following errors:
+		Project namespace name has already been taken
+		Name has already been taken
+		Path has already been taken

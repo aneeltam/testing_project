@@ -1,0 +1,87 @@
+
+#******************** Settings ************************
+
+*** Settings ***
+
+Documentation	Testing the register functionality. Register Test scenario with valid and invalid credentials.
+
+Pre Condition	Open Browser
+Post Condition	Close All Browsers
+Tags	Register, TS-3-Register
+
+#******************* Common Variables ********************
+
+*** Variables ***
+
+RegisterUrl = https://gitlab.com/users/sign_up
+GitHub_Username= XYZ
+GitHub_Password= ***
+Username= WZX
+Password= ****
+Invalid_Username= XYZZZ
+Invalid_Password= ******
+Group name= GroupName
+Project name= TestName
+Email= Email
+FirstName= FName
+LastName= LName
+Empty=
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+# Positive Tests
+
+Register With Valid GitHub Credentials For The First Time
+	Navigate To Register Page	RegisterUrl
+	Click On GitHub Logo
+	Input GitHub Username	GitHub_Username
+	Input Password	GitHub_Password
+	Click Sign In
+	Choose Your Two-factor Authentication Method
+	Confirm Selection
+	Enter The Verification Code
+	Authorize Gitlab
+	Click Verify
+	Solve Verification Puzzle To Prove Human Identity
+	Input Group Name	GroupName
+	Input Project Name	TestName
+	Click To Choose Project
+	Verify Page Should Contain Welcome Page
+
+# Negative Tests
+
+Register User With Empty GitHub Password
+	Navigate To Register Page	RegisterUrl
+	Click On GitHub Logo
+	Input Username	UserName
+	Input No Password	Empty
+	Submit Login Form
+	Verify That Error Message Says Please fill out this field
+
+Register User With Invalid GitHub Username
+	Navigate To Register Page	RegisterUrl
+	Click On GitHub Logo
+	Input Invalid Username	UserName
+	Input Valid Password	Password
+	Submit Login Form
+	Verify That Error Message Says Incorrect username or password
+
+Register User Without Recaptcha Answer
+	Navigate To Register Page	RegisterUrl
+	Input First Name	FirstName
+	Input Last Name	LastName
+	Input Username	Username
+	Input Password	Password
+	Verify That Error Message Says Complete verification to sign up
+
+Register User With Invalid Recaptcha Answer
+	Navigate To Register Page	RegisterUrl
+	Input First Name	FirstName
+	Input Last Name	LastName
+	Input Username	Username
+	Input Password	Password
+	Verify Recaptcha
+	Choose Invalid Option
+	Verify That Error Message Says Whoops! That's not quite right. Try again
